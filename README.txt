@@ -1,0 +1,1 @@
+Versión Usada: Python 3.10.11 
