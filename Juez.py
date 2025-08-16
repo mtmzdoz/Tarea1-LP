@@ -22,7 +22,7 @@ caracteres_permitidos = r"[¿?¡!.,;\-():\" \s]"
 palabra = f"(?:{string}|{caracteres_permitidos}|{digitos})"
 
 
-def IdentificarRimas(nombre_archivo):
+def IdentificarEstrofas(nombre_archivo):
     # Abrir el archivo en modo lectura
     EstrofasArchivo = open(nombre_archivo, "r", encoding="utf-8")
     
@@ -47,23 +47,33 @@ def IdentificarRimas(nombre_archivo):
             i+=1
         ListaEstrofas.append(Verso)
     
-    for verso in ListaEstrofas:
-        if len(verso) != 4:
-            print("Estrofa Invalida")
-        else:
-            print("Estrofa Valida")
+    
    
-    
-    
     # Cerrar el archivo 
     EstrofasArchivo.close()
     return ListaEstrofas
 
+def ArchivoSalida(nombre_archivo):
 
+    ListaEstrofas = IdentificarEstrofas(nombre_archivo)
+    ArchSalida= "decision.txt"
+    ArchSalida= open(ArchSalida,"w", encoding="utf-8")
+
+    i=1
+    for verso in ListaEstrofas:
+        if len(verso) != 4:
+            escribir=f"Estrofa {i}: Inválida" 
+        else:
+            escribir=f"Estrofa {i}: Válida"
+        
+        ArchSalida.write(escribir+"\n")
+        i+=1         
+    
 
 # Imprimir el contenido
 # print(ContenidoEstrofas)
-print(IdentificarRimas("estrofas.txt"))
+print(IdentificarEstrofas("estrofas.txt"))
+print(ArchivoSalida("estrofas.txt"))
 
 
 

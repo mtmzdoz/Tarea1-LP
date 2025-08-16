@@ -1,0 +1,4 @@
+Estrofa 1: Inválida
+Estrofa 2: Válida
+Estrofa 3: Válida
+Estrofa 4: Válida
