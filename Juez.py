@@ -13,13 +13,12 @@ palabra ::= (<string>|<caracteres_permitidos>|<digitos>)
 '''
 
 digitos = r"[0-9]"
-vocal = r"[AEIOUaeiou]"
-vocal_acentuada = r"[ÁÉÍÓÚáéíóú]"
+vocales = r"[AEIOUaeiouÁÉÍÓÚáéíóú]"
 letras = r"[A-Za-zÑñ]"
-
-string = f"(?:{vocal}|{vocal_acentuada}|{letras})+"
 caracteres_permitidos = r"[¿?¡!.,;\-():\" \s]"
-palabra = f"(?:{string}|{caracteres_permitidos}|{digitos})"
+
+STRING = rf"(?:{vocales}|{letras})+"
+PALABRA = rf"(?:{string}|{caracteres_permitidos}|{digitos})"
 
 
 def IdentificarEstrofas(nombre_archivo):
@@ -49,7 +48,7 @@ def IdentificarEstrofas(nombre_archivo):
     return ListaEstrofas
 
 def ExtraerUltPalabraVerso(ListaEstrofas):
-    ListaUltVersos=[]
+    ListaUltPalVersos=[]
     for versos in ListaEstrofas:
         if len(versos) == 4:
             UltimasPalabras= []
@@ -57,15 +56,47 @@ def ExtraerUltPalabraVerso(ListaEstrofas):
                 palabras = palabra.strip().split()
                 ultima = palabras[-1].strip(',.´\'"')
                 UltimasPalabras.append(ultima)
-            ListaUltVersos.append(UltimasPalabras)
-    return ListaUltVersos
-                
+            ListaUltPalVersos.append(UltimasPalabras)
+    return ListaUltPalVersos
+
+def Palabralimpia(palabra):
+    letras=re.findallall(PALABRA,palabra)
+    letras= letras.join(letras)
+    return letras
+
+def TipoRima(palabra1, palabra2):
+    p1= Palabralimpia(palabra1)
+    p2= Palabralimpia(palabra2)
+
+    if re.search(f"{palabra1}", palabra2):
+        return "consonante"
+
 def IdentificarRimas(ListaUltVersos):
-    PuntajeEstrofa= []
+    Puntaje= []
 
     for palabra in ListaUltVersos:
-                  
-           
+         v1, v2, v3, v4 = palabra
+         print(v1, v2, v3, v4)
+        
+    return v1, v2, v3, v4
+""""
+        pares = [(v1,v2),(v1,v3),(v1,v4),(v2,v3),(v2,v4),(v3,v4)]
+        
+        for a,b in pares:
+            tipo = TipoRima(a,b)
+            if tipo == "consonante":
+                # Coincidencia 3-4 letras → 5 pts (puedes ajustar n_consonante)
+                puntaje += 5
+            elif tipo == "asonante":
+                puntaje += 5
+            # ninguna → 0 pts
+            
+        Puntajes.append(puntaje)
+    
+    return Puntajes
+"""
+    
+    
 
 
 def ArchivoSalida(nombre_archivo):
@@ -86,9 +117,14 @@ def ArchivoSalida(nombre_archivo):
     
 
 # Imprimir el contenido
-print(IdentificarEstrofas("estrofas.txt"))
+#print(IdentificarEstrofas("estrofas.txt"))
 ListaEstrofas = IdentificarEstrofas("estrofas.txt")
-ListaUltVersos= ExtraerUltPalabraVerso(ListaEstrofas)
+ListaUltPalabraVersos= ExtraerUltPalabraVerso(ListaEstrofas)
+print(ListaUltPalabraVersos)
+print(IdentificarRimas(ListaUltPalabraVersos))
+v1 = "escabiando"
+v2 = "flotando"
+#print(TipoRima(v1, v2))
 #print(ArchivoSalida("estrofas.txt"))
 
 
