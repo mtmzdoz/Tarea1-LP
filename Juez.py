@@ -25,13 +25,11 @@ palabra = f"(?:{string}|{caracteres_permitidos}|{digitos})"
 def IdentificarEstrofas(nombre_archivo):
     # Abrir el archivo en modo lectura
     EstrofasArchivo = open(nombre_archivo, "r", encoding="utf-8")
-    
     ContenidoArchivo = EstrofasArchivo.read()
     
-    
     Estrofas= ContenidoArchivo.strip().split("\n")
-    # Se detecta Palabras bonus fresco, mangos, melón, cielo. Linea 1
-    if "," in Estrofas[0] and Estrofas[1].strip()== "":
+    # Se identifican palabras bonus fresco, mangos, melón, cielo. Linea 1
+    if ("," in Estrofas[0] and Estrofas[1].strip()== "") or Estrofas[1].strip()== "":
         PalabrasBonus= Estrofas[0]
         i=2
     else:
@@ -46,12 +44,29 @@ def IdentificarEstrofas(nombre_archivo):
             Verso.append(Estrofas[i])
             i+=1
         ListaEstrofas.append(Verso)
-    
-    
-   
     # Cerrar el archivo 
     EstrofasArchivo.close()
     return ListaEstrofas
+
+def ExtraerUltPalabraVerso(ListaEstrofas):
+    ListaUltVersos=[]
+    for versos in ListaEstrofas:
+        if len(versos) == 4:
+            UltimasPalabras= []
+            for palabra in versos: 
+                palabras = palabra.strip().split()
+                ultima = palabras[-1].strip(',.´\'"')
+                UltimasPalabras.append(ultima)
+            ListaUltVersos.append(UltimasPalabras)
+    return ListaUltVersos
+                
+def IdentificarRimas(ListaUltVersos):
+    PuntajeEstrofa= []
+
+    for palabra in ListaUltVersos:
+                  
+           
+
 
 def ArchivoSalida(nombre_archivo):
 
@@ -71,9 +86,10 @@ def ArchivoSalida(nombre_archivo):
     
 
 # Imprimir el contenido
-# print(ContenidoEstrofas)
 print(IdentificarEstrofas("estrofas.txt"))
-print(ArchivoSalida("estrofas.txt"))
+ListaEstrofas = IdentificarEstrofas("estrofas.txt")
+ListaUltVersos= ExtraerUltPalabraVerso(ListaEstrofas)
+#print(ArchivoSalida("estrofas.txt"))
 
 
 
