@@ -18,7 +18,7 @@ letras = r"[A-Za-zÑñ]"
 caracteres_permitidos = r"[¿?¡!.,;\-():\" \s]"
 
 STRING = rf"(?:{vocales}|{letras})+"
-PALABRA = rf"(?:{string}|{caracteres_permitidos}|{digitos})"
+PALABRA = rf"(?:{STRING}|{caracteres_permitidos}|{digitos})"
 
 
 def IdentificarEstrofas(nombre_archivo):
@@ -45,7 +45,7 @@ def IdentificarEstrofas(nombre_archivo):
         ListaEstrofas.append(Verso)
     # Cerrar el archivo 
     EstrofasArchivo.close()
-    return ListaEstrofas
+    return  ListaEstrofas
 
 def ExtraerUltPalabraVerso(ListaEstrofas):
     ListaUltPalVersos=[]
@@ -60,25 +60,63 @@ def ExtraerUltPalabraVerso(ListaEstrofas):
     return ListaUltPalVersos
 
 def Palabralimpia(palabra):
-    letras=re.findallall(PALABRA,palabra)
-    letras= letras.join(letras)
-    return letras
+    string=re.findall(STRING,palabra)
+    string= "".join(string)
+    return string
 
 def TipoRima(palabra1, palabra2):
     p1= Palabralimpia(palabra1)
     p2= Palabralimpia(palabra2)
 
-    if re.search(f"{palabra1}", palabra2):
-        return "consonante"
+    print(p1,p2)
+    # Rango desde la long completa de p1 hasta la 3ra letra, y empieza desde atras (-1)
+    for i in range(len(p1), 2, -1):
+        sufijo= p1[-i:]
+        if re.search(rf"{sufijo}$", p2):
+            CantidadLetras=len(sufijo)
+            return f"consonante", CantidadLetras
 
-def IdentificarRimas(ListaUltVersos):
-    Puntaje= []
+    VocalesP1= "".join(re.findall(vocales, palabra1))
+    VocalesP2= "".join(re.findall(vocales, palabra2))
 
-    for palabra in ListaUltVersos:
-         v1, v2, v3, v4 = palabra
-         print(v1, v2, v3, v4)
+    for i in range(len(VocalesP1), 0, -1):
+        sufijo = VocalesP1[-i:]
+        if re.search(rf"{sufijo}$", VocalesP2):
+            CantidadLetras= len(sufijo)
+            return f"asonante", CantidadLetras
+    
+    return "No Riman"
+
+
+
         
-    return v1, v2, v3, v4
+
+
+def IdentificarRimas(ListaUltPalabraVersos):
+    Puntaje= 0
+    for palabra in ListaUltPalabraVersos:
+        v1, v2, v3, v4 = palabra
+        print(v1, v2, v3, v4)
+
+        Rima1, MatchLetras1 = TipoRima(v1, v2)
+        Rima2, MatchLetras2 = TipoRima(v1, v3)
+        Rima3, MatchLetras3 = TipoRima(v1, v4)
+        Rima4, MatchLetras4 = TipoRima(v2, v3)
+        Rima5, MatchLetras5 = TipoRima(v2, v4)
+        Rima6, MatchLetras6 = TipoRima(v3, v4)
+        
+        if Rima1 == "consonante":
+            if MatchLetras1 <= 4:
+                Puntaje+= 5
+            elif MatchLetras1 >= 5:
+                Puntaje+=8
+        if Rima6 == "consonante":
+            if MatchLetras6 <= 4:
+                Puntaje+= 5
+            elif MatchLetras6 >= 5:
+                Puntaje+=8
+    return Puntaje
+
 """"
         pares = [(v1,v2),(v1,v3),(v1,v4),(v2,v3),(v2,v4),(v3,v4)]
         
@@ -95,7 +133,7 @@ def IdentificarRimas(ListaUltVersos):
     
     return Puntajes
 """
-    
+   
     
 
 
@@ -120,11 +158,11 @@ def ArchivoSalida(nombre_archivo):
 #print(IdentificarEstrofas("estrofas.txt"))
 ListaEstrofas = IdentificarEstrofas("estrofas.txt")
 ListaUltPalabraVersos= ExtraerUltPalabraVerso(ListaEstrofas)
-print(ListaUltPalabraVersos)
+#print(ListaUltPalabraVersos)
 print(IdentificarRimas(ListaUltPalabraVersos))
-v1 = "escabiando"
-v2 = "flotando"
-#print(TipoRima(v1, v2))
+v1="malambo"
+v2="mango"
+#print(TipoRima(v1,v2))
 #print(ArchivoSalida("estrofas.txt"))
 
 
