@@ -35,21 +35,26 @@ def IdentificarEstrofas(nombre_archivo):
         i=0
 
     ListaEstrofas = []
+    ValidezEstrofa= True
+
     while i<len(Estrofas):
         Verso=[]
         if Estrofas[i] == "":
             i+=1
         while i < len(Estrofas) and Estrofas[i] != "":
+            for caracter in Estrofas[i]:
+                if not re.match(PALABRA, caracter):
+                    ValidezEstrofa= False
             Verso.append(Estrofas[i])
             i+=1
-        ListaEstrofas.append(Verso)
+        ListaEstrofas.append((Verso, ValidezEstrofa))
     # Cerrar el archivo 
     EstrofasArchivo.close()
-    return  ListaEstrofas
+    return  PalabrasBonus, ListaEstrofas
 
 def ExtraerUltPalabraVerso(ListaEstrofas):
     ListaUltPalVersos=[]
-    for versos in ListaEstrofas:
+    for versos, validez in ListaEstrofas:
         if len(versos) == 4:
             UltimasPalabras= []
             for palabra in versos: 
@@ -59,93 +64,89 @@ def ExtraerUltPalabraVerso(ListaEstrofas):
             ListaUltPalVersos.append(UltimasPalabras)
     return ListaUltPalVersos
 
-def Palabralimpia(palabra):
-    string=re.findall(STRING,palabra)
-    string= "".join(string)
-    return string
-
 def TipoRima(palabra1, palabra2):
-    p1= Palabralimpia(palabra1)
-    p2= Palabralimpia(palabra2)
-
+    p1= palabra1
+    p2= palabra2
     print(p1,p2)
+
+
+    #----GEMELA----
+    if re.match(p1,p2):
+        return "Gemela"
+    
+    #----CONSONANTE----
     # Rango desde la long completa de p1 hasta la 3ra letra, y empieza desde atras (-1)
     for i in range(len(p1), 2, -1):
-        sufijo= p1[-i:]
-        if re.search(rf"{sufijo}$", p2):
-            CantidadLetras=len(sufijo)
-            return f"consonante", CantidadLetras
-
-    VocalesP1= "".join(re.findall(vocales, palabra1))
-    VocalesP2= "".join(re.findall(vocales, palabra2))
-
-    for i in range(len(VocalesP1), 0, -1):
-        sufijo = VocalesP1[-i:]
-        if re.search(rf"{sufijo}$", VocalesP2):
-            CantidadLetras= len(sufijo)
-            return f"asonante", CantidadLetras
+        concidencia = re.match(PALABRA, p1[-i:])
+        if concidencia:
+            sufijo= concidencia.group()
+            if re.search(sufijo, p2):
+                CantidadLetras=len(sufijo)
+                return "Consonante", CantidadLetras
     
-    return "No Riman"
+   #----ASONANTE----
+    VocalesP1 = ""
+    VocalesP2 = ""
+    for vocal in re.findall(vocales, p1):
+        VocalesP1 += vocal
+
+    for vocal in re.findall(vocales, p2):
+        VocalesP2 += vocal
+
+    print(VocalesP1, VocalesP2)
+    VocalesIguales= ""
+    ContadorVocales= 0
+    for i in range(1, min(len(VocalesP1), len(VocalesP2)) + 1):
+        if VocalesP1[-i]==VocalesP2[-i]:
+            VocalesIguales= VocalesP1[-i] + VocalesIguales
+            ContadorVocales +=1
+        else:
+            break
+    
+    if VocalesIguales and re.search(VocalesIguales, VocalesP2):
+        return "Asonante", CantidadLetras
+    
+    
 
 
-
-        
-
-
-def IdentificarRimas(ListaUltPalabraVersos):
+def IDRimas(ListaUltPalabraVersos):
     Puntaje= 0
     for palabra in ListaUltPalabraVersos:
         v1, v2, v3, v4 = palabra
         print(v1, v2, v3, v4)
 
-        Rima1, MatchLetras1 = TipoRima(v1, v2)
-        Rima2, MatchLetras2 = TipoRima(v1, v3)
-        Rima3, MatchLetras3 = TipoRima(v1, v4)
-        Rima4, MatchLetras4 = TipoRima(v2, v3)
-        Rima5, MatchLetras5 = TipoRima(v2, v4)
-        Rima6, MatchLetras6 = TipoRima(v3, v4)
-        
-        if Rima1 == "consonante":
-            if MatchLetras1 <= 4:
-                Puntaje+= 5
-            elif MatchLetras1 >= 5:
-                Puntaje+=8
-        if Rima6 == "consonante":
-            if MatchLetras6 <= 4:
-                Puntaje+= 5
-            elif MatchLetras6 >= 5:
-                Puntaje+=8
-    return Puntaje
+      
 
-""""
         pares = [(v1,v2),(v1,v3),(v1,v4),(v2,v3),(v2,v4),(v3,v4)]
         
         for a,b in pares:
-            tipo = TipoRima(a,b)
-            if tipo == "consonante":
-                # Coincidencia 3-4 letras → 5 pts (puedes ajustar n_consonante)
+            Tipo, CoincidenciaLetras = TipoRima(a,b)
+            if Tipo == "Consonante" and CoincidenciaLetras <= 4:
+                Puntaje +=5
+            else:
+
                 puntaje += 5
             elif tipo == "asonante":
                 puntaje += 5
             # ninguna → 0 pts
             
-        Puntajes.append(puntaje)
+        Puntaje.append(puntaje)
     
-    return Puntajes
-"""
+    return Puntaje
+
    
     
 
 
 def ArchivoSalida(nombre_archivo):
 
-    ListaEstrofas = IdentificarEstrofas(nombre_archivo)
+    PalabrasBonus, ListaEstrofas = IdentificarEstrofas(nombre_archivo)
     ArchSalida= "decision.txt"
     ArchSalida= open(ArchSalida,"w", encoding="utf-8")
 
     i=1
-    for verso in ListaEstrofas:
-        if len(verso) != 4:
+    for verso, validez in  ListaEstrofas:
+        if len(verso) != 4 or validez == False:
             escribir=f"Estrofa {i}: Inválida" 
         else:
             escribir=f"Estrofa {i}: Válida"
@@ -156,14 +157,16 @@ def ArchivoSalida(nombre_archivo):
 
 # Imprimir el contenido
 #print(IdentificarEstrofas("estrofas.txt"))
-ListaEstrofas = IdentificarEstrofas("estrofas.txt")
+PalabrasBonus, ListaEstrofas = IdentificarEstrofas("estrofas.txt")
+#print(PalabrasBonus)
+#print(ListaEstrofas)
 ListaUltPalabraVersos= ExtraerUltPalabraVerso(ListaEstrofas)
-#print(ListaUltPalabraVersos)
-print(IdentificarRimas(ListaUltPalabraVersos))
+print(ListaUltPalabraVersos)
+#print(IdentificarRimas(ListaUltPalabraVersos))
 v1="malambo"
-v2="mango"
-#print(TipoRima(v1,v2))
-#print(ArchivoSalida("estrofas.txt"))
+v2="mangos"
+print(TipoRima(v1,v2))
+print(ArchivoSalida("estrofas.txt"))
 
 
 
