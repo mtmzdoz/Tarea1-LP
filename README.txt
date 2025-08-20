@@ -21,6 +21,14 @@ Ej: Penalización
 Estrofa 1: 4.4/10
 Rimas: Consonante, No Riman, Asonante
 
+Ej: Misma Terminación
+... fist
+... blast
+... escabiando
+... flotando
+Estrofa 1: 1.4/10
+Rimas: Misma Terminación, No Riman, Consonante
+
 Observaciones:
 -No hay problemas de ejecutarlo sin palabras bonus
 -No hay problema de ejecutarlo con espacio en blanco al inicio o final
