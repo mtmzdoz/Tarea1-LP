@@ -96,7 +96,7 @@ def TipoRima(palabra1, palabra2):
             sufijo= concidencia.group()
             if re.search(sufijo, p2):
                 CantidadLetras=len(sufijo)
-                if CantidadLetras <= 4:
+                if CantidadLetras == 3 or CantidadLetras== 4:
                     Puntaje = 5
                 else:
                     Puntaje=8
