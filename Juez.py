@@ -20,6 +20,17 @@ caracteres_permitidos = r"[¿?¡!.,;\-():\" \s]"
 STRING = rf"(?:{vocales}|{letras})+"
 PALABRA = rf"(?:{STRING}|{caracteres_permitidos}|{digitos})"
 
+def CleanPalabra(palabra):
+    palabra = palabra.lower()
+    #Reemplazar tildes
+    palabra = re.sub(r"[á]", "a", palabra)
+    palabra = re.sub(r"[é]", "e", palabra)
+    palabra = re.sub(r"[í]", "i", palabra)
+    palabra = re.sub(r"[ó]", "o", palabra)
+    palabra = re.sub(r"[ú]", "u", palabra)
+    #Reemplazar lo que no sea letra 
+    palabra = re.sub(r"[^A-Za-zÑñ]", "", palabra)
+    return palabra
 
 def IdentificarEstrofas(nombre_archivo):
     # Abrir el archivo en modo lectura
@@ -29,18 +40,20 @@ def IdentificarEstrofas(nombre_archivo):
     Estrofas= ContenidoArchivo.strip().split("\n")
     # Se identifican palabras bonus fresco, mangos, melón, cielo. Linea 1
     if ("," in Estrofas[0] and Estrofas[1].strip()== "") or Estrofas[1].strip()== "":
-        PalabrasBonus= Estrofas[0]
+        PalabrasBonus= []
+        for pbonus in Estrofas[0].split(","):
+            pbonus_limpia = CleanPalabra(pbonus)
+            PalabrasBonus.append(pbonus_limpia)
         i=2
     else:
         PalabrasBonus = "No hay"
         i=0
-
     ListaEstrofas = []
     
-
     while i<len(Estrofas):
         Verso=[]
         ValidezEstrofa= True
+
         if Estrofas[i] == "":
             i+=1
         while i < len(Estrofas) and Estrofas[i] != "":
@@ -57,7 +70,6 @@ def IdentificarEstrofas(nombre_archivo):
 def ExtraerUltPalabra(PalabrasBonus, ListaEstrofas):
     UltPalVersos=[]
     
-
     for versos, validez in ListaEstrofas:
         if len(versos) == 4:
             UltimasPalabras= []
@@ -77,8 +89,8 @@ def ExtraerUltPalabra(PalabrasBonus, ListaEstrofas):
     return UltPalVersos
 
 def TipoRima(palabra1, palabra2):
-    p1= palabra1
-    p2= palabra2
+    p1= CleanPalabra(palabra1)
+    p2= CleanPalabra(palabra2)
     print(p1,p2)
 
     Rima=[]
@@ -218,9 +230,6 @@ def ArchivoSalida(nombre_archivo):
 
 PalabrasBonus, ListaEstrofas = IdentificarEstrofas("estrofas.txt")
 ListaUltPalabraVersos = ExtraerUltPalabra(PalabrasBonus, ListaEstrofas)
-v1="desierto"
-v2="cuto"
-print(TipoRima(v1,v2))
 print(ArchivoSalida("estrofas.txt"))
 
 
