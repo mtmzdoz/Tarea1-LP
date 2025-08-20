@@ -149,8 +149,6 @@ def TipoRima(palabra1, palabra2):
                 Puntaje=2
             return "Misma Terminación", Puntaje
     
-    
-
     return "No Riman", 0
 
 
@@ -221,7 +219,7 @@ def ArchivoSalida(nombre_archivo):
 PalabrasBonus, ListaEstrofas = IdentificarEstrofas("estrofas.txt")
 ListaUltPalabraVersos = ExtraerUltPalabra(PalabrasBonus, ListaEstrofas)
 v1="desierto"
-v2="tanto"
+v2="cuto"
 print(TipoRima(v1,v2))
 print(ArchivoSalida("estrofas.txt"))
 

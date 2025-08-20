@@ -1,6 +1,6 @@
 Estrofa 1: Inválida
-Estrofa 2: 5.4/10 (BONUS)
-Rimas: Asonante, Consonante
+Estrofa 2: 4.4/10
+Rimas: Consonante, No Riman, Asonante
 Estrofa 3: 7.8/10
 Rimas: Asonante, Consonante
 Estrofa 4: 6.8/10 (BONUS)
