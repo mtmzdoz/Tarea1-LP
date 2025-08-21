@@ -20,6 +20,16 @@ caracteres_permitidos = r"[¿?¡!.,;\-():\" \s]"
 STRING = rf"(?:{vocales}|{letras})+"
 PALABRA = rf"(?:{STRING}|{caracteres_permitidos}|{digitos})"
 
+"""
+***
+Parametro 1 : String (str)
+***
+Tipo de Retorno: String (str)
+***
+Toma una palabra, la convierte en minúsculas. Si la vocal tiene tilde la intercambia por su versión
+sin tilde. Además limpia cualquier caráracter de la palabra.
+Retorna la palabra "limpia" para poder hacer las comparaciones.
+"""
 def CleanPalabra(palabra):
     palabra = palabra.lower()
     #Reemplazar tildes
@@ -32,6 +42,17 @@ def CleanPalabra(palabra):
     palabra = re.sub(r"[^A-Za-zÑñ]", "", palabra)
     return palabra
 
+"""
+***
+Parametro 1 : String (str)
+***
+Tipo de Retorno: Tupla
+***
+Lee el archivo de texto estrofas.txt. Identifica las palabras bonus en la primera línea
+si es que existen y luego se verefica la válidez de las estrofas.
+Retorna una tupla con la lista de palabras bonus y una lista de estrofas, donde esta 
+última tambíen corresponde a una tupla (versos, válidez).
+"""
 def IdentificarEstrofas(nombre_archivo):
     # Abrir el archivo en modo lectura
     EstrofasArchivo = open(nombre_archivo, "r", encoding="utf-8")
@@ -67,6 +88,20 @@ def IdentificarEstrofas(nombre_archivo):
     EstrofasArchivo.close()
     return  PalabrasBonus, ListaEstrofas
 
+
+"""
+***
+Parametro 1 : Lista 
+Parametro 2 : Lista
+***
+Tipo de Retorno: Lista
+***
+De cada estrofa de 4 versos (estrofa válida) se extrae la última palabra, además
+se evalúa si alguna de estas útimas palabras coincide con alguna de
+las palabras bonus para luego poder sumarlo en el puntaje bruto.
+Retorna una lista de tuplas, cada tulpa esta compuesta por: una lista de las
+últimas palabras de cada verso y el bonus.
+"""
 def ExtraerUltPalabra(PalabrasBonus, ListaEstrofas):
     UltPalVersos=[]
     
@@ -88,10 +123,21 @@ def ExtraerUltPalabra(PalabrasBonus, ListaEstrofas):
 
     return UltPalVersos
 
+"""
+***
+Parametro 1 : String (str)
+Parametro 2 : String (str)
+***
+Tipo de Retorno: Tupla
+***
+Se identifica el tipo de rima entre dos palabras. Primero se verifica la rima 
+gemela, luego consonante y asonante y se verifica cual de estas dos da mayor puntaje para
+asignar la mejor rima, y finalmente se verifica la rima de misma terminación.
+Retorna la mejor rima encontrada con su respectivo puntaje 
+"""
 def TipoRima(palabra1, palabra2):
     p1= CleanPalabra(palabra1)
     p2= CleanPalabra(palabra2)
-    print(p1,p2)
 
     Rima=[]
     Puntaje=0
@@ -123,16 +169,12 @@ def TipoRima(palabra1, palabra2):
     for vocal in re.findall(vocales, p2.lower()):
         VocalesP2 += vocal
 
-    #print(VocalesP1, VocalesP2)
-
     VocalesIguales= ""
     ContadorVocales= 0
     for i in range(1, min(len(VocalesP1), len(VocalesP2)) + 1):
         if VocalesP1[-i]==VocalesP2[-i]:
             VocalesIguales= VocalesP1[-i] + VocalesIguales
             ContadorVocales +=1
-    
-    #print(VocalesIguales, ContadorVocales)
 
     if VocalesIguales and re.search(VocalesIguales, VocalesP2):
         if ContadorVocales == 1:
@@ -163,14 +205,23 @@ def TipoRima(palabra1, palabra2):
     
     return "No Riman", 0
 
-
+"""
+***
+Parametro 1 : Lista
+***
+Tipo de Retorno: Lista
+***
+Se recorre una lista con las últimas palabras de cada verso y se evalúan todas las combinaciones
+entre rimas utilizando la función TipoRima. Se calcula el puntaje bruto, con bonus o penalizacion 
+en cada caso respectivo.
+Retorna una lista compuesta por: una lista con las rimas identificadas, el puntaje final y el bonus
+"""
 def IDRimas(ListaUltPalabraVersos):
     
     Resultado= []
 
     for palabra, bonus in ListaUltPalabraVersos:
         v1, v2, v3, v4 = palabra
-        #print(v1, v2, v3, v4)
 
         pares = [(v1,v2),(v1,v3),(v1,v4),(v2,v3),(v2,v4),(v3,v4)]
 
@@ -180,7 +231,6 @@ def IDRimas(ListaUltPalabraVersos):
 
         for a,b in pares:
             Tipo, Puntos = TipoRima(a,b)
-            print(Tipo, Puntos)
             if Tipo != "No Riman":
                 TotalPuntaje += Puntos
                 Descuento = False
@@ -192,14 +242,22 @@ def IDRimas(ListaUltPalabraVersos):
         if Descuento:
             TotalPuntaje -=2
 
-        print(TotalPuntaje)
         TotalPuntaje= (TotalPuntaje + bonus )/5
         Resultado.append((RimaFinal, TotalPuntaje, bonus))
-
-        print (Resultado)
+        print(Resultado)
     return Resultado
 
-   
+"""
+***
+Parametro 1 : String (str)
+***
+Tipo de Retorno: None
+***
+Procesa un archivo usando las funciones IdentificarEstrofas(), ExtraerUltPalabra() e IDRimas().
+Para luego generar un archivo de salida "decision.txt" donde se indica por estrofa el puntaje 
+obtenido, si contiene la palabra bonus y los tipos de rima, en el caso de que la estrofa no
+sea válida, esta se marca como "Inválida"
+"""   
 def ArchivoSalida(nombre_archivo):
 
     PalabrasBonus, ListaEstrofas = IdentificarEstrofas(nombre_archivo)

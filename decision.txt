@@ -1,7 +1,7 @@
 Estrofa 1: Inválida
-Estrofa 2: 5.4/10 (BONUS)
-Rimas: Asonante, Consonante
-Estrofa 3: 7.8/10
-Rimas: Asonante, Consonante
-Estrofa 4: 6.8/10 (BONUS)
-Rimas: Asonante
+Estrofa 2: 1.2/10
+Rimas: Gemela
+Estrofa 3: 1.2/10
+Rimas: Gemela
+Estrofa 4: 1.2/10
+Rimas: Gemela

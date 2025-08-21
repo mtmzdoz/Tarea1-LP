@@ -3,14 +3,11 @@ Rol: 202473652-3
 Rut: 21.715.078-7
 Versión Usada: Python 3.10.11 en Visual Studio Code
 
-
-
 Observaciones:
 -No hay problemas de ejecutarlo sin palabras bonus
 -No hay problema de ejecutarlo con espacio en blanco al inicio o final
--Las estrofas se separan con una línea en blanco, de otra forma el codigo funciona pero erronameante.
--Entre versos (v1,v2) por ejemplo, Las vocales tildadas RIMAN con las vocales no tildadas
--Si la palabra bonus esta tilada pero en los versos se encuentra SIN tilde, NO se aplica bonus.
+-Las estrofas se separan con una línea en blanco, de otra forma el código funciona pero erronameante.
+-Las vocales no tildada SI RIMAN con las tildadas
 
 
 Siguiendo el ejemplo del pdf, los resultados son los mismos
