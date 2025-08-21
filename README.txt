@@ -5,13 +5,12 @@ Versión Usada: Python 3.10.11 en Visual Studio Code
 
 Observaciones:
 -No hay problemas de ejecutarlo sin palabras bonus
--No hay problema de ejecutarlo con espacio en blanco al inicio o final
--Las estrofas se separan con una línea en blanco, de otra forma el código funciona pero erronameante.
--Las vocales no tildada SI RIMAN con las tildadas
-
+-No hay problema de ejecutarlo con espacio en blanco al final
+-Las estrofas se separan con UNA línea en blanco, de otra forma el código identifica las líneas como inválidas
+-Las vocales tildadas SI RIMAN con las no tildadas
 
 Siguiendo el ejemplo del pdf, los resultados son los mismos
-Otros ejemplos que dieron igual fueron
+Otros ejemplos que dieron igual fueron:
 Ej: Gemelas
 ... desierto
 ... desierto

@@ -27,7 +27,7 @@ Parametro 1 : String (str)
 Tipo de Retorno: String (str)
 ***
 Toma una palabra, la convierte en minúsculas. Si la vocal tiene tilde la intercambia por su versión
-sin tilde. Además limpia cualquier caráracter de la palabra.
+sin tilde. Además, limpia cualquier carácter de la palabra.
 Retorna la palabra "limpia" para poder hacer las comparaciones.
 """
 def CleanPalabra(palabra):
@@ -49,9 +49,9 @@ Parametro 1 : String (str)
 Tipo de Retorno: Tupla
 ***
 Lee el archivo de texto estrofas.txt. Identifica las palabras bonus en la primera línea
-si es que existen y luego se verefica la válidez de las estrofas.
+si es que existen y luego se verifica la validez de las estrofas.
 Retorna una tupla con la lista de palabras bonus y una lista de estrofas, donde esta 
-última tambíen corresponde a una tupla (versos, válidez).
+última también corresponde a una tupla (versos, validez).
 """
 def IdentificarEstrofas(nombre_archivo):
     # Abrir el archivo en modo lectura
@@ -97,9 +97,9 @@ Parametro 2 : Lista
 Tipo de Retorno: Lista
 ***
 De cada estrofa de 4 versos (estrofa válida) se extrae la última palabra, además
-se evalúa si alguna de estas útimas palabras coincide con alguna de
-las palabras bonus para luego poder sumarlo en el puntaje bruto.
-Retorna una lista de tuplas, cada tulpa esta compuesta por: una lista de las
+se evalúa si alguna de estas últimas palabras coincide con alguna de las palabras 
+bonus para luego poder sumarlo en el puntaje bruto.
+Retorna una lista de tuplas, cada tulpa está compuesta por: una lista de las
 últimas palabras de cada verso y el bonus.
 """
 def ExtraerUltPalabra(PalabrasBonus, ListaEstrofas):
@@ -131,8 +131,8 @@ Parametro 2 : String (str)
 Tipo de Retorno: Tupla
 ***
 Se identifica el tipo de rima entre dos palabras. Primero se verifica la rima 
-gemela, luego consonante y asonante y se verifica cual de estas dos da mayor puntaje para
-asignar la mejor rima, y finalmente se verifica la rima de misma terminación.
+gemela, luego consonante y asonante y se verifica cual de estas dos da mayor puntaje 
+para asignar la mejor rima, y finalmente se verifica la rima de misma terminación.
 Retorna la mejor rima encontrada con su respectivo puntaje 
 """
 def TipoRima(palabra1, palabra2):
@@ -212,7 +212,7 @@ Parametro 1 : Lista
 Tipo de Retorno: Lista
 ***
 Se recorre una lista con las últimas palabras de cada verso y se evalúan todas las combinaciones
-entre rimas utilizando la función TipoRima. Se calcula el puntaje bruto, con bonus o penalizacion 
+entre rimas utilizando la función TipoRima. Se calcula el puntaje bruto, con bonus o penalización 
 en cada caso respectivo.
 Retorna una lista compuesta por: una lista con las rimas identificadas, el puntaje final y el bonus
 """
@@ -244,7 +244,7 @@ def IDRimas(ListaUltPalabraVersos):
 
         TotalPuntaje= (TotalPuntaje + bonus )/5
         Resultado.append((RimaFinal, TotalPuntaje, bonus))
-        print(Resultado)
+       
     return Resultado
 
 """
